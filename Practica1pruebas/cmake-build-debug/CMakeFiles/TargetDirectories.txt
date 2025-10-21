@@ -1,3 +1,0 @@
-C:/Users/admin/Downloads/EEDDPracticas-main/EEDDPracticas-main/Practica2pruebas/Practica1pruebas/cmake-build-debug/CMakeFiles/Practica1.dir
-C:/Users/admin/Downloads/EEDDPracticas-main/EEDDPracticas-main/Practica2pruebas/Practica1pruebas/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/admin/Downloads/EEDDPracticas-main/EEDDPracticas-main/Practica2pruebas/Practica1pruebas/cmake-build-debug/CMakeFiles/rebuild_cache.dir
