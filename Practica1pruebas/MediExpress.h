@@ -26,7 +26,7 @@ public:
     VDinamico<Laboratorio*> buscarLabCiudad(const std::string& nombreCiudad);
     VDinamico<Pamedicamento*> buscarCompuesto(const std::string& nombrePA);
     VDinamico<Pamedicamento*> getMedicamSinLab();
-
+//Cambiar estas funciones al main para que mediexpress se quede los mas modelico posible y que todas las pruebas se hagan en el main
     void BuscarGranada();
     void BuscarJaen();
     void ByMostrarMadrid();
@@ -36,4 +36,5 @@ public:
 };
 
 #endif //MEDIEXPRESS_H
+
 
