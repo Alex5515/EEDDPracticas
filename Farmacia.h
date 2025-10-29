@@ -1,7 +1,3 @@
-//
-// Created by Fernando SCarrion on 27/10/2025.
-//
-
 #ifndef PRACTICA1_FARMACIA_H
 #define PRACTICA1_FARMACIA_H
 

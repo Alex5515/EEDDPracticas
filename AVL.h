@@ -1,7 +1,3 @@
-//
-// Created by Fernando SCarrion on 28/10/2025.
-//
-
 #ifndef PRACTICA1_AVL_H
 #define PRACTICA1_AVL_H
 
