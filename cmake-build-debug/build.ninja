@@ -84,6 +84,13 @@ build CMakeFiles/Practica1.dir/AVL.cpp.obj: CXX_COMPILER__Practica1_unscanned_De
   OBJECT_DIR = CMakeFiles\Practica1.dir
   OBJECT_FILE_DIR = CMakeFiles\Practica1.dir
 
+build CMakeFiles/Practica1.dir/Laboratorio.cpp.obj: CXX_COMPILER__Practica1_unscanned_Debug C$:/Users/Fernando$ SCarrion/Desktop/Fernando/ing_informatica/4º_curso/EEDD/Practica3/Laboratorio.cpp || cmake_object_order_depends_target_Practica1
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\Practica1.dir\Laboratorio.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\Practica1.dir
+  OBJECT_FILE_DIR = CMakeFiles\Practica1.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Practica1
@@ -92,7 +99,7 @@ build CMakeFiles/Practica1.dir/AVL.cpp.obj: CXX_COMPILER__Practica1_unscanned_De
 #############################################
 # Link the executable Practica1.exe
 
-build Practica1.exe: CXX_EXECUTABLE_LINKER__Practica1_Debug CMakeFiles/Practica1.dir/main.cpp.obj CMakeFiles/Practica1.dir/PaMedicamento.cpp.obj CMakeFiles/Practica1.dir/MediExpress.cpp.obj CMakeFiles/Practica1.dir/Farmacia.cpp.obj CMakeFiles/Practica1.dir/AVL.cpp.obj
+build Practica1.exe: CXX_EXECUTABLE_LINKER__Practica1_Debug CMakeFiles/Practica1.dir/main.cpp.obj CMakeFiles/Practica1.dir/PaMedicamento.cpp.obj CMakeFiles/Practica1.dir/MediExpress.cpp.obj CMakeFiles/Practica1.dir/Farmacia.cpp.obj CMakeFiles/Practica1.dir/AVL.cpp.obj CMakeFiles/Practica1.dir/Laboratorio.cpp.obj
   CONFIG = Debug
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

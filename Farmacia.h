@@ -1,49 +1,61 @@
 #ifndef PRACTICA1_FARMACIA_H
 #define PRACTICA1_FARMACIA_H
+/**
+ * @file Farmacia.h
+ * @brief Declaración de la clase Farmacia (según UML de la práctica).
+ */
 
 #include <string>
 #include "VDinamico.h"
 
-class PaMedicamento; // <-- clase correcta
+class PaMedicamento;
 class MediExpress;
 
+/**
+ * @class Farmacia
+ * @brief Representa una farmacia con un pequeño almacén de medicamentos.
+ */
 class Farmacia {
 private:
-    std::string _cif, _provincia, _localidad, _nombre, _direccion, _codPostal;
-    VDinamico<PaMedicamento*> _dispense;   // stock por puntero, sin copias
-    MediExpress* _linkMedi = nullptr;
+    // Atributos del UML
+    std::string cif;
+    std::string provincia;
+    std::string localidad;
+    std::string nombre;
+    std::string direccion;
+    std::string codPostal;
+
+    // Relaciones
+    MediExpress* linkMedi;                 ///< Enlace a MediExpress (no-ownership)
+    VDinamico<PaMedicamento*> dispenses;   ///< Medicamentos que dispensa (punteros, sin copia)
 
 public:
-    Farmacia() = default;
-    explicit Farmacia(const std::string& cif): _cif(cif) {}
-    Farmacia(std::string cif, std::string nombre, std::string direccion,
-             std::string localidad, std::string provincia, std::string cp = "")
-        : _cif(std::move(cif)), _provincia(std::move(provincia)), _localidad(std::move(localidad)),
-          _nombre(std::move(nombre)), _direccion(std::move(direccion)), _codPostal(std::move(cp)) {}
+    // Constructores
+    Farmacia();
+    Farmacia(const std::string& _cif, const std::string& _prov, const std::string& _loc,
+             const std::string& _nom, const std::string& _dir, const std::string& _cp);
 
-    // getters
-    const std::string& cif() const { return _cif; }
-    const std::string& provincia() const { return _provincia; }
-    const std::string& localidad() const { return _localidad; }
-    const std::string& nombre() const { return _nombre; }
-    const std::string& direccion() const { return _direccion; }
-    const std::string& codPostal() const { return _codPostal; }
+    // Getters básicos
+    const std::string& getCIF() const;
+    const std::string& getNombre() const;
+    const std::string& getLocalidad() const;
+    const std::string& getProvincia() const;
+    const std::string& getDireccion() const;  ///< <-- añadido
+    const std::string& getCodPostal() const;  ///< <-- añadido
 
-    void setLinkMedi(MediExpress* m) { _linkMedi = m; }
+    // Integración
+    void setLinkMedi(MediExpress* medi);
 
-    // API del UML (y overload práctico)
-    PaMedicamento* buscaMedicam(int id_num) const;
-    PaMedicamento* buscaMedicam(const std::string& id_num) const;
+    // Operaciones del UML
+    PaMedicamento* pedidoMedicam(int id_num);          ///< Pide a MediExpress si no lo tiene.
+    PaMedicamento* buscaMedicam(int id_num) const;     ///< Busca por id en su dispensario.
+    void dispensaMedicam(PaMedicamento* pa);           ///< Añade al dispensario si no está.
 
-    void dispensaMedicam(PaMedicamento* pa);
-
-    PaMedicamento* pedidoMedicam(int id_num);
-    PaMedicamento* pedidoMedicam(const std::string& id_num);
-
-    // Para AVL: orden por CIF
-    bool operator<(const Farmacia& o) const { return _cif < o._cif; }
+    // Comparadores para uso en AVL (clave = CIF)
+    bool operator<(const Farmacia& other) const { return cif < other.cif; }
+    bool operator>(const Farmacia& other) const { return cif > other.cif; }
+    bool operator==(const Farmacia& other) const { return cif == other.cif; }
+    bool operator==(const std::string& cif_) const { return cif == cif_; }
 };
-
-std::ostream& operator<<(std::ostream& os, const Farmacia& f);
 
 #endif //PRACTICA1_FARMACIA_H

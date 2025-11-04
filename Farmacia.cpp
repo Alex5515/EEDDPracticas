@@ -1,48 +1,49 @@
-// Farmacia.cpp
+/**
+* @file Farmacia.cpp
+ * @brief Implementación de la clase Farmacia.
+ */
+
 #include "Farmacia.h"
-#include "PaMedicamento.h"  // getId(), getNombre(), ...  :contentReference[oaicite:1]{index=1}
-#include "MediExpress.h"    // suministrarFarmacia(Farmacia&, int)
-#include <cstdlib>
+#include "PaMedicamento.h"
+#include "MediExpress.h"
 
-static inline int to_int(const std::string& s) {
-    // conversión segura básica; si falla -> 0 (ajusta si quieres tratar errores)
-    try { return std::stoi(s); } catch (...) { return 0; }
-}
+Farmacia::Farmacia() : linkMedi(nullptr) {}
 
-PaMedicamento* Farmacia::buscaMedicam(const std::string& id_num) const {
-    return buscaMedicam(to_int(id_num));
-}
+Farmacia::Farmacia(const std::string& _cif, const std::string& _prov, const std::string& _loc,
+                   const std::string& _nom, const std::string& _dir, const std::string& _cp)
+    : cif(_cif), provincia(_prov), localidad(_loc), nombre(_nom),
+      direccion(_dir), codPostal(_cp), linkMedi(nullptr) {}
+
+const std::string& Farmacia::getCIF() const        { return cif; }
+const std::string& Farmacia::getNombre() const     { return nombre; }
+const std::string& Farmacia::getLocalidad() const  { return localidad; }
+const std::string& Farmacia::getProvincia() const  { return provincia; }
+const std::string& Farmacia::getDireccion() const  { return direccion; }   // <-- añadido
+const std::string& Farmacia::getCodPostal() const  { return codPostal; }   // <-- añadido
+
+void Farmacia::setLinkMedi(MediExpress* medi) { linkMedi = medi; }
 
 PaMedicamento* Farmacia::buscaMedicam(int id_num) const {
-    for (unsigned i = 0; i < _dispense.tamlog(); ++i) {
-        // Ahora la comparación es por int usando PaMedicamento::getId()
-        if (_dispense[i] && _dispense[i]->getIdNum() == id_num) return _dispense[i];
+    for (unsigned i = 0; i < dispenses.tamlog(); ++i) {
+        PaMedicamento* pa = dispenses[i];
+        if (pa && pa->operator==(id_num)) return pa;
     }
     return nullptr;
 }
 
-void Farmacia::dispensaMedicam(PaMedicamento* pa){
-    if (pa) _dispense.insertar(pa);
+void Farmacia::dispensaMedicam(PaMedicamento* pa) {
+    if (!pa) return;
+    if (buscaMedicam(pa->getIdNum()) == nullptr) {
+        dispenses.insertar(pa);
+    }
 }
 
-PaMedicamento* Farmacia::pedidoMedicam(const std::string& id_num){
-    // delega en la versión int para llamar a la firma correcta de MediExpress
-    return pedidoMedicam(to_int(id_num));
-}
-
-PaMedicamento* Farmacia::pedidoMedicam(int id_num){
-    if (PaMedicamento* m = buscaMedicam(id_num)) return m;
-    if (!_linkMedi) return nullptr;
-    // Llama a suministrarFarmacia(Farmacia&, int) — firma del UML
-    return _linkMedi->suministrarFarmacia(*this, id_num);
-}
-
-std::ostream& operator<<(std::ostream& os, const Farmacia& f){
-    os << "Farmacia(CIF=" << f.cif()
-       << ", Nombre=" << f.nombre()
-       << ", " << f.localidad()
-       << ", " << f.provincia()
-       << ", CP=" << f.codPostal() << ")";
-    return os;
+PaMedicamento* Farmacia::pedidoMedicam(int id_num) {
+    PaMedicamento* ya = buscaMedicam(id_num);
+    if (ya) return ya;
+    if (linkMedi) {
+        return linkMedi->suministrarFarmacia(*this, id_num);
+    }
+    return nullptr;
 }
 

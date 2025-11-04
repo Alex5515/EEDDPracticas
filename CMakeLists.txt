@@ -16,4 +16,5 @@ add_executable(Practica1
         Farmacia.cpp
         AVL.cpp
         AVL.h
+        Laboratorio.cpp
 )

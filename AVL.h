@@ -1,68 +1,87 @@
 #ifndef PRACTICA1_AVL_H
 #define PRACTICA1_AVL_H
+/**
+ * @file AVL.h
+ * @brief Declaración de la clase plantilla AVL<T> implementando un árbol equilibrado AVL.
+ *
+ * Implementa la funcionalidad completa descrita en la Lección 11 y la Práctica 3:
+ *  - Inserción con balanceo (rotaciones simples y dobles)
+ *  - Búsqueda recursiva e iterativa
+ *  - Recorrido inorden que devuelve VDinamico<T*>
+ *  - Constructor copia (preorden), destructor (postorden)
+ *  - Operador de asignación
+ *  - Cálculo de altura y número de elementos
+ *
+ * @author Fernando Salas
+ * @date 2025
+ */
 
-#include <stdexcept>
+
+
+#include <iostream>
 #include "VDinamico.h"
 
-// Árbol AVL genérico con excepciones y utilidades pedidas en el enunciado.
-// NOTA: La implementación está en AVL.cpp y se instancia explícitamente para Farmacia.
+/// @brief Nodo de un árbol AVL.
+template <typename T>
+class Nodo {
+public:
+    T dato;                  ///< Dato almacenado en el nodo
+    Nodo<T>* izq;            ///< Puntero al hijo izquierdo
+    Nodo<T>* der;            ///< Puntero al hijo derecho
+    char bal;                ///< Factor de equilibrio (-1, 0, 1)
 
-template <class T>
+    /**
+     * @brief Constructor del nodo.
+     * @param ele Elemento a insertar en el nodo.
+     */
+    explicit Nodo(const T& ele) : dato(ele), izq(nullptr), der(nullptr), bal(0) {}
+};
+
+/// @brief Clase plantilla que representa un árbol equilibrado AVL.
+template <typename T>
 class AVL {
 private:
-    struct Nodo {
-        T dato;
-        Nodo* izq;
-        Nodo* der;
-        int altura;
-        explicit Nodo(const T& d) : dato(d), izq(nullptr), der(nullptr), altura(1) {}
-    };
+    Nodo<T>* raiz; ///< Puntero a la raíz del árbol
+    unsigned int numNodos; ///< Número de elementos del árbol
 
-    Nodo* raiz = nullptr;
-    unsigned int nElems = 0;
+    // Métodos auxiliares privados
+    void destruir(Nodo<T>* nodo);
+    Nodo<T>* copiarPreorden(const Nodo<T>* nodoOrigen);
+    unsigned int contarNodos(Nodo<T>* nodo) const;
+    unsigned int alturaRec(Nodo<T>* nodo) const;
+    void recorreInordenAux(Nodo<T>* nodo, VDinamico<T*>& v) const;
 
-    // Utilidades internas
-    static int  h(Nodo* n);
-    static int  balance(Nodo* n);
-    static void actAltura(Nodo* n);
+    // Operaciones básicas AVL
+    void rotDecha(Nodo<T>*& p);
+    void rotIzqda(Nodo<T>*& p);
+    int insertaRec(Nodo<T>*& c, const T& dato);
 
-    static void rotDer(Nodo*& n);
-    static void rotIzq(Nodo*& n);
-
-    static bool insertaRec(Nodo*& n, const T& dato);
-    static void equilibrar(Nodo*& n);
-
-    static T*  buscaRecImpl(Nodo* n, const T& dato);
-    static T*  buscaItImpl(Nodo* n, const T& dato);
-
-    // *** const-correctness: acepta puntero a Nodo const ***
-    static void inorden(const Nodo* n, VDinamico<T*>& acc);
-
-    static Nodo* copiaPreorden(Nodo* o);
-    static void  liberaPostorden(Nodo* n);
+    // Búsquedas auxiliares
+    T* buscaRecAux(Nodo<T>* nodo, const T& dato) const;
+    T* buscaItAux(Nodo<T>* nodo, const T& dato) const;
 
 public:
-    // Constructores / asignación / destructor
-    AVL() = default;
+    // Constructores y destructor
+    AVL();
     AVL(const AVL<T>& origen);
-    AVL<T>& operator=(const AVL<T>& origen);
     ~AVL();
 
-    // Rotaciones públicas (si se quisieran probar externamente)
-    void rotDerPublic(Nodo*& nodo) { rotDer(nodo); }
-    void rotIzqPublic(Nodo*& nodo) { rotIzq(nodo); }
+    // Operador de asignación
+    AVL<T>& operator=(const AVL<T>& origen);
 
-    // Operaciones del enunciado
-    bool inserta(T& dato);
-    T*   buscaRec(T& dato);
-    T*   buscaIt(T& dato);
-
-    // *** const-correctness: ahora es const ***
+    // Operaciones públicas del árbol
+    bool inserta(const T& dato);
+    T* buscaRec(const T& dato) const;
+    T* buscaIt(const T& dato) const;
     VDinamico<T*> recorreInorden() const;
+    unsigned int numElementos() const;
+    unsigned int altura() const;
 
-    unsigned int numElementos() const { return nElems; }
-    unsigned int altura() const { return h(raiz); }
+    /// @brief Comprueba si el árbol está vacío.
+    bool vacio() const { return raiz == nullptr; }
 };
+
+#include "AVL.cpp" // Inclusión del cpp para plantillas
 
 
 #endif //PRACTICA1_AVL_H

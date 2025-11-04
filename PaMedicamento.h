@@ -1,61 +1,45 @@
 #ifndef PRACTICA1_PAMEDICAMENTO_H
 #define PRACTICA1_PAMEDICAMENTO_H
 
+/**
+ * @file PaMedicamento.h
+ * @brief Declaración de la clase PaMedicamento (principio activo / medicamento).
+ */
+
 #include <string>
-#include <iostream>
 
-// Adelanto para evitar inclusiones circulares
-class Laboratorio;
+class Laboratorio; // forward
 
+/**
+ * @class PaMedicamento
+ * @brief Representa un medicamento / principio activo.
+ */
 class PaMedicamento {
 private:
-    // --- UML ---
-    int         id_num;     // Identificador numérico
-    std::string id_alpha;   // Identificador alfanumérico
-    std::string nombre;     // Nombre del PA
-
-    // Relación UML: servidoPor (Laboratorio l)
-    Laboratorio* servidoPor = nullptr; // puntero, no copia
+    int      id_num;        ///< Identificador numérico (único)
+    std::string id_alpha;   ///< Identificador alfanumérico
+    std::string nombre;     ///< Nombre del medicamento / PA
+    Laboratorio* servidoPor;///< Laboratorio que lo sirve (puede ser nullptr)
 
 public:
-    // --- Constructores ---
-    PaMedicamento(int id_num = 0,
-                  const std::string& id_alpha = "",
-                  const std::string& nombre = "");
+    /// @brief Ctor por defecto.
+    PaMedicamento();
 
-    // --- Getters (camelCase, recomendados) ---
-    int                  getIdNum()     const;
-    const std::string&   getIdAlpha()   const;
-    const std::string&   getNombre()    const;
-    Laboratorio*         getSuministrador() const;   // nombre claro
-    Laboratorio*         getServidoPor() const;      // alias del UML
+    /// @brief Ctor con datos.
+    PaMedicamento(int idNum, const std::string& idAlpha, const std::string& nom);
 
-    // --- Setters (camelCase) ---
-    void setIdNum(int v);
-    void setIdAlpha(const std::string& v);
-    void setNombre(const std::string& v);
-    void setSuministrador(Laboratorio* lab);         // nombre claro
-    void setServidoPor(Laboratorio* lab);            // alias del UML
+    // Getters / setters básicos (sin copias pesadas)
+    int getIdNum() const;
+    const std::string& getIdAlpha() const;
+    const std::string& getNombre() const;
+    Laboratorio* getLaboratorio() const;
 
-    // --- Compatibilidad retro (snake_case) ---
-    // Si tu código llama a estos nombres, seguirán funcionando.
-    int                get_id_num() const            { return getIdNum(); }
-    const std::string& get_id_alpha() const          { return getIdAlpha(); }
-    const std::string& get_nombre() const            { return getNombre(); }
-    Laboratorio*       get_suministrador() const     { return getSuministrador(); }
-    void               set_id_num(int v)             { setIdNum(v); }
-    void               set_id_alpha(const std::string& v){ setIdAlpha(v); }
-    void               set_nombre(const std::string& v)  { setNombre(v); }
-    void               suministrarMed(Laboratorio* lab)   { setSuministrador(lab); } // API usada en tu MediExpress
+    void setLaboratorio(Laboratorio* lab);
+    void setNombre(const std::string& nom);
 
-    // --- Operadores de comparación (por id_num) ---
-    bool operator<(const PaMedicamento& other)  const;
-    bool operator==(const PaMedicamento& other) const;
-    bool operator>(const PaMedicamento& other)  const { return other < *this; }
-
-    // --- Salida legible ---
-    friend std::ostream& operator<<(std::ostream& os, const PaMedicamento& med);
+    // Comparadores por id_num (para búsquedas)
+    bool operator==(int id) const { return id_num == id; }
+    bool operator<(const PaMedicamento& other) const { return id_num < other.id_num; }
 };
-
 
 #endif //PRACTICA1_PAMEDICAMENTO_H
